@@ -17,37 +17,39 @@ function validateCount(value) {
 //Задача 2
 class Triangle {
   constructor (a, b, c) {
-    try {
       if(a + b <= c || b + c <= a || a + c <= b) {
         throw new Error('Треугольник с такими сторонами не существует');
       }
       this.a = a;
       this.b = b;
       this.c = c;
-      this.p = a + b + c;
-      this.s = function Area() {
-        const pp = this.p / 2;
-        const area = Math.sqrt(pp * (pp - this.a) * (pp - this.b) * (pp - this.c));
-        return +area.toFixed(3);
-      };
-    }
-
-    catch(err) {
-      this.p = 'Ошибка! Треугольник не существует';
-      this.s = function Area(){
-        return 'Ошибка! Треугольник не существует'};
-     }
     }
 
     getPerimeter() {
-      return this.p;
+      return this.a + this.b + this.c;
     }
 
     getArea() {
-      return this.s();
+      const pp = this.getPerimeter() / 2;
+      const area = Math.sqrt(pp * (pp - this.a) * (pp - this.b) * (pp - this.c));
+      return +area.toFixed(3);
     }
 }
 
 function getTriangle(a, b, c) {
+  try {
     return new Triangle(a, b, c);
+  }
+
+  catch(err) {
+    class TriangleError {
+      getPerimeter() {
+        return 'Ошибка! Неправильный треугольник';
+      }
+      getArea() {
+        return 'Ошибка! Неправильный треугольник';
+      }
+    }
+    return new TriangleError();
+  }
 }
