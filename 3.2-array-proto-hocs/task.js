@@ -17,27 +17,27 @@ function compareArrays(arr1, arr2) {
 
 function memorize(fn, limit) {
   let memory = [];
-  return function fn2() {
-    let n = Array.from(arguments);
-
-    function find(n) {
-      for (let i = 0; i < memory.length; i++) {
-        if (compareArrays(n, memory[i].args) === true) {
-          return memory[i];
-        }
-      }
+  return function (...rest) {
+    let foundElement = memory.find((item) => compareArrays(item.args, rest));
+    if (foundElement) {
+      return foundElement.result;
     }
-
-    let f = find(n);
-    if (f !== undefined) {
-      return f.result;
-    } else {
-      if (memory.length >= limit) {
-        memory.shift();
-      }
-      let res = fn(...n);
-      memory.push({args: n, result: res});
-      return res;
+    if (memory.length >= limit) {
+      memory.shift();
     }
+    let resultFn = fn(...rest);
+    memory.push({args: rest, result: resultFn});
+    return resultFn;
   }
 }
+
+function testCase(testFunction, sumTimer) {
+  const arr = [ [1,2,1], [1,2], [1,2,3], [1,2], [9,5,2,4] ];
+  console.time(sumTimer);
+  for (i = 1; i <= 100; i++) {
+    arr.forEach((item) => testFunction(...item));
+  }
+  console.timeEnd(sumTimer);
+}
+
+//testCase(memorize);
