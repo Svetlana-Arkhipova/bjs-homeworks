@@ -27,13 +27,17 @@ class  AlarmClock {
 
   getCurrentFormattedTime() {
     const currentDate = new Date();
-    return `${currentDate.getHours()}:${currentDate.getMinutes()}`;
+    let hours = currentDate.getHours();
+    let minutes = currentDate.getMinutes();
+    if (hours === 0 || hours < 10) {hours = `0${hours}`};
+    if (minutes === 0 || minutes < 10) {minutes = `0${hours}`};
+    return `${hours}:${minutes}`;
   }
 
   start() {
-    let currentTime = this.getCurrentFormattedTime();
+    let currentTime = this.getCurrentFormattedTime;
     function checkClock(call) {
-      if (call.time === currentTime) {
+      if (call.time === currentTime()) {
         return call.action();
       }
     }
@@ -43,11 +47,14 @@ class  AlarmClock {
     }
   }
 
-  // stop() {
-  //   clearInterval(this.start().interval);
-  // }
+  stop() {
+    if (this.timerId !== undefined) {
+      clearInterval(this.timerId);
+    }
+  }
 
   printAlarms() {
+    console.log(`Печать будильников в количестве ${this.alarmCollection.length}:`);
     this.alarmCollection.forEach((item) => {
       console.log(`Будильник №${item.id} заведен на ${item.time}`);
     });
@@ -57,4 +64,13 @@ class  AlarmClock {
     this.stop();
     this.alarmCollection.length = 0;
   }
+}
+
+function testCase() {
+  let alarm = new AlarmClock();
+  alarm.addClock(alarm.getCurrentFormattedTime(), () => setInterval(() => console.log('Звонит звонок 1'), 1000), 1);
+  alarm.addClock(alarm.getCurrentFormattedTime(), () => {console.log('Звонит звонок 2'); alarm.removeClock(2)}, 2);
+  alarm.addClock(alarm.getCurrentFormattedTime(), () => {console.log('Звонит звонок 3'); alarm.clearAlarms(); alarm.printAlarms();}, 3);
+  alarm.printAlarms();
+  alarm.start();
 }
