@@ -29,8 +29,8 @@ class  AlarmClock {
     const currentDate = new Date();
     let hours = currentDate.getHours();
     let minutes = currentDate.getMinutes();
-    if (hours === 0 || hours < 10) {hours = `0${hours}`};
-    if (minutes === 0 || minutes < 10) {minutes = `0${hours}`};
+    if (hours < 10) {hours = `0${hours}`};
+    if (minutes < 10) {minutes = `0${minutes}`};
     return `${hours}:${minutes}`;
   }
 
@@ -42,7 +42,7 @@ class  AlarmClock {
       }
     }
     if (this.timerId === undefined) {
-      let interval = setInterval(() => this.alarmCollection.forEach((item) => {checkClock(item)}), 60000);
+      let interval = setInterval(() => this.alarmCollection.forEach((item) => {checkClock(item)}), 1000);
       this.timerId = interval;
     }
   }
@@ -68,9 +68,9 @@ class  AlarmClock {
 
 function testCase() {
   let alarm = new AlarmClock();
-  alarm.addClock(alarm.getCurrentFormattedTime(), () => setInterval(() => console.log('Звонит звонок 1'), 1000), 1);
-  alarm.addClock(alarm.getCurrentFormattedTime(), () => {console.log('Звонит звонок 2'); alarm.removeClock(2)}, 2);
-  alarm.addClock(alarm.getCurrentFormattedTime(), () => {console.log('Звонит звонок 3'); alarm.clearAlarms(); alarm.printAlarms();}, 3);
+  alarm.addClock('21:00', () => console.log('Звонит звонок 1'), 1);
+  alarm.addClock('21:01', () => {console.log('Звонит звонок 2'); alarm.removeClock(2)}, 2);
+  alarm.addClock('21:02', () => {console.log('Звонит звонок 3'); alarm.clearAlarms(); alarm.printAlarms();}, 3);
   alarm.printAlarms();
   alarm.start();
 }
