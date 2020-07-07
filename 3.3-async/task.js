@@ -21,7 +21,8 @@ class  AlarmClock {
 
   removeClock (id) {
     const originArr = this.alarmCollection.length;
-    const filteredArr = this.alarmCollection.filter((item) => (item.id !== id)).length;
+    this.alarmCollection = this.alarmCollection.filter((item) => (item.id !== id));
+    const filteredArr = this.alarmCollection.length;
     return originArr !== filteredArr;
   }
 
